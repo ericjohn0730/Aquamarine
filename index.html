@@ -3,68 +3,183 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Student Portal</title>
+  <title>Student Portal - Track Your Scores</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f0f2f5; }
-    .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
-    input, button { padding: 10px; font-size: 16px; margin-top: 10px; width: 100%; }
-    button { background: #007BFF; color: white; border: none; cursor: pointer; }
-    button:hover { background: #0056b3; }
-    .error { color: red; margin-top: 10px; }
-    .result { margin-top: 20px; }
-    .result h2 { margin-bottom: 10px; }
-    .result ul { list-style: none; padding: 0; }
-    .result li { padding: 5px 0; border-bottom: 1px solid #ccc; display: flex; justify-content: space-between; }
+    /* Reset some default styles */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: #fff;
+      max-width: 480px;
+      width: 100%;
+      border-radius: 12px;
+      padding: 30px 40px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 15px;
+      color: #4b3f72;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+    }
+
+    p.subtitle {
+      margin-bottom: 30px;
+      font-weight: 500;
+      color: #6c5b7b;
+      font-size: 16px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px 18px;
+      font-size: 16px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      transition: border-color 0.3s ease;
+    }
+    input[type="text"]:focus {
+      border-color: #764ba2;
+      outline: none;
+      box-shadow: 0 0 8px rgba(118, 75, 162, 0.4);
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 14px 18px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      background: #764ba2;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background: #5e378d;
+    }
+
+    .error {
+      margin-top: 15px;
+      color: #e63946;
+      font-weight: 600;
+    }
+
+    .result {
+      margin-top: 30px;
+      text-align: left;
+      background: #f9f9fb;
+      border-radius: 10px;
+      padding: 20px 25px;
+      box-shadow: inset 0 0 8px rgba(118, 75, 162, 0.1);
+    }
+
+    .result h2 {
+      margin-top: 0;
+      color: #4b3f72;
+      border-bottom: 2px solid #764ba2;
+      padding-bottom: 8px;
+    }
+
+    .result ul {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0;
+    }
+
+    .result li {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #ddd;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .result li:last-child {
+      border-bottom: none;
+      font-weight: 700;
+      color: #764ba2;
+    }
+
+    @media (max-width: 520px) {
+      .container {
+        padding: 25px 20px;
+      }
+      button, input[type="text"] {
+        font-size: 16px;
+        padding: 12px 15px;
+      }
+    }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>Student Portal</h1>
-  <input type="text" id="studentId" placeholder="Enter your Student ID" />
-  <button onclick="fetchStudentData()">View Scores</button>
-  <div id="error" class="error"></div>
-  <div id="result" class="result"></div>
-</div>
+  <div class="container">
+    <h1>Student Portal</h1>
+    <p class="subtitle">Enter your Student ID to view your scores.</p>
+    <input type="text" id="studentId" placeholder="e.g. 2025001" />
+    <button onclick="fetchStudentData()">View Scores</button>
+    <div id="error" class="error"></div>
+    <div id="result" class="result"></div>
+  </div>
 
-<script>
-  async function fetchStudentData() {
-    const id = document.getElementById('studentId').value.trim();
-    const errorDiv = document.getElementById('error');
-    const resultDiv = document.getElementById('result');
-    errorDiv.textContent = '';
-    resultDiv.innerHTML = '';
+  <script>
+    async function fetchStudentData() {
+      const id = document.getElementById('studentId').value.trim();
+      const errorDiv = document.getElementById('error');
+      const resultDiv = document.getElementById('result');
+      errorDiv.textContent = '';
+      resultDiv.innerHTML = '';
 
-    if (!id) {
-      errorDiv.textContent = 'Please enter your Student ID.';
-      return;
-    }
-
-    try {
-      // Your Web App URL here:
-      const response = await fetch(`https://script.google.com/macros/s/AKfycbw4iOLFpUcYoyAul2i4zv8fH-FHdNRq9GeEb1HejPAymvufm4Aybykasw5AcdFt8xkM/exec?id=${encodeURIComponent(id)}`);
-      const data = await response.json();
-
-      if (!data || Object.keys(data).length === 0) {
-        errorDiv.textContent = 'Student not found.';
+      if (!id) {
+        errorDiv.textContent = 'Please enter your Student ID.';
         return;
       }
 
-      let html = `<h2>${data.Name || 'Student'}</h2><ul>`;
-      for (const key in data) {
-        if (key !== 'Name' && key !== 'Student ID') {
-          html += `<li><strong>${key}</strong> <span>${data[key]}</span></li>`;
-        }
-      }
-      html += '</ul>';
-      resultDiv.innerHTML = html;
+      try {
+        // Replace with your actual Google Apps Script Web App URL
+        const response = await fetch(`https://script.google.com/macros/s/AKfycbw4iOLFpUcYoyAul2i4zv8fH-FHdNRq9GeEb1HejPAymvufm4Aybykasw5AcdFt8xkM/exec?id=${encodeURIComponent(id)}`);
+        const data = await response.json();
 
-    } catch (error) {
-      errorDiv.textContent = 'Error fetching data. Please try again later.';
-      console.error(error);
+        if (!data || Object.keys(data).length === 0) {
+          errorDiv.textContent = 'Student not found.';
+          return;
+        }
+
+        let html = `<h2>${data.Name || 'Student'}</h2><ul>`;
+        for (const key in data) {
+          if (key !== 'Name' && key !== 'Student ID') {
+            html += `<li><span>${key}</span><span>${data[key]}</span></li>`;
+          }
+        }
+        html += '</ul>';
+        resultDiv.innerHTML = html;
+
+      } catch (error) {
+        errorDiv.textContent = 'Error fetching data. Please try again later.';
+        console.error(error);
+      }
     }
-  }
-</script>
+  </script>
 
 </body>
 </html>
