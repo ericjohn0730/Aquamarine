@@ -181,7 +181,7 @@
       }
 
       try {
-        const response = await fetch(`https://script.google.com/macros/s/AKfycbw4iOLFpUcYoyAul2i4zv8fH-FHdNRq9GeEb1HejPAymvufm4Aybykasw5AcdFt8xkM/exec?id=${encodeURIComponent(id)}`);
+        const response = await fetch(`https://script.google.com/macros/s/AKfycbz7oWFO22PW_lvP_8rLd8FOZo9JvhEolrmhzDNol5vzQ30v85e8ND2QxdZdxaoW_3vN/exec?id=${encodeURIComponent(id)}`);
         const data = await response.json();
 
         if (!data || Object.keys(data).length === 0) {
